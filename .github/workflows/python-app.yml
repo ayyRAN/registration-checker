@@ -1,0 +1,62 @@
+# .github/workflows/course-checker.yml
+name: Course Availability Checker
+
+on:
+  schedule:
+    # Run every hour during business hours (9 AM - 9 PM EST)
+    # - cron: '0 14-2 * * 1-5'  # Monday-Friday, 9 AM - 9 PM EST (UTC+5)
+    # Run every 4 hours on weekends
+    # - cron: '0 */4 * * 6,0'   # Saturday-Sunday, every 4 hours
+    - cron: '0 0 * * *' # Runs daily at midnight UTC
+
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  check-courses:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install dependencies
+      run: |
+        pip install -r "requirements.txt"
+        
+    - name: Install Chrome and ChromeDriver
+      run: |
+        # Install Chrome
+        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+        echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+        sudo apt-get update
+        sudo apt-get install google-chrome-stable
+        
+        # Install ChromeDriver
+        CHROME_VERSION=$(google-chrome --version | cut -d " " -f3 | cut -d "." -f1)
+        wget -O /tmp/chromedriver.zip "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION}/chromedriver_linux64.zip"
+        sudo unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
+        sudo chmod +x /usr/local/bin/chromedriver
+        
+    - name: Run course checker
+      run: |
+        python course_checker.py
+      env:
+        # Add any environment variables you need (like SMS API keys)
+        TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+        TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+        TWILIO_NUMBER: ${{ secrets.TWILIO_NUMBER }}
+        MY_NUMBER: ${{ secrets.MY_NUMBER }}
+
+    - name: Upload results (optional)
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: course-check-results
+        path: |
+          *.log
+          *.txt
