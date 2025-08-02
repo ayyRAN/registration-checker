@@ -36,8 +36,24 @@ def send_sms(message):
 
 def setup_driver():
     options = Options()
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--window-size=1920,1080")
+    options.add_argument("--disable-extensions")
+    options.add_argument("--disable-plugins")
+    options.add_argument("--disable-images")  # Faster loading
     options.add_argument("--log-level=3")
-    service = Service(executable_path="chromedriver.exe")
+    
+    if os.getenv('GITHUB_ACTIONS'):
+        # In GitHub Actions, use system Chrome
+        from webdriver_manager.chrome import ChromeDriverManager
+        service = Service(ChromeDriverManager().install())
+    else:
+        # Local development
+        service = Service(executable_path="chromedriver.exe")
+    
     driver = webdriver.Chrome(service=service, options=options)
     driver.get("https://loris.wlu.ca/register/ssb/term/termSelection?mode=courseSearch")
     return driver
