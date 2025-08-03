@@ -14,7 +14,12 @@ on:
 jobs:
   check-courses:
     runs-on: ubuntu-latest
-    
+    env:
+        # Add any environment variables you need (like SMS API keys)
+        TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+        TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
+        TWILIO_NUMBER: ${{ secrets.TWILIO_NUMBER }}
+        MY_NUMBER: ${{ secrets.MY_NUMBER }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -32,12 +37,6 @@ jobs:
     - name: Run course checker
       run: |
         python course_checker.py
-      env:
-        # Add any environment variables you need (like SMS API keys)
-        TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-        TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
-        TWILIO_NUMBER: ${{ secrets.TWILIO_NUMBER }}
-        MY_NUMBER: ${{ secrets.MY_NUMBER }}
 
     - name: Upload results (optional)
       uses: actions/upload-artifact@v4
