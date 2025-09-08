@@ -12,11 +12,11 @@ from twilio.rest import Client
 from dotenv import load_dotenv
 import os
 
-COURSES = [367, 414, 322, 320, 465, 340, 472]  # your courses
-SUBJECT = "Computer Science"
+COURSES = [202, 110, 300, 101]  # your courses
+SUBJECT = "Education Minor"
 TERMS = [
-    # ("Fall 2025", "//div[@id='select2-result-label-4']/.."),
-    ("Winter 2026", "//div[@id='select2-result-label-3']/..")
+    ("Fall 2025", "//div[@id='select2-result-label-4']/.."),
+    # ("Winter 2026", "//div[@id='select2-result-label-3']/..")
 ]
 
 
@@ -233,14 +233,14 @@ def get_course_status(driver, wait, course_num, term_name):
                     # Determine status
                     if is_full and waitlist_seats == 0:
                         status = "Full"
-                    elif main_seats > 0 or waitlist_seats > 0:
+                    elif main_seats > 0 and waitlist_seats != 0 or waitlist_seats > 0:
                         status = "Open"
                     else:
                         status = "Full"
                     
                     # Format output similar to your original
                     section_info = f"Section {section_count}" if section_count > 1 else ""
-                    result = f"{term_name} | CP {course_num} {section_info}: {status}"
+                    result = f"{term_name} | EM {course_num} {section_info}: {status}"
                     
                     # Add seat details for debugging
                     if main_seats > 0:
