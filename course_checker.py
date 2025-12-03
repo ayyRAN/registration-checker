@@ -12,11 +12,11 @@ from twilio.rest import Client
 from dotenv import load_dotenv
 import os
 
-COURSES = [202, 110, 300, 101]  # your courses
-SUBJECT = "Education Minor"
+COURSES = [367, 320, 465, 460]  # your courses
+SUBJECT = "Computer Science"
 TERMS = [
-    ("Fall 2025", "//div[@id='select2-result-label-4']/.."),
-    # ("Winter 2026", "//div[@id='select2-result-label-3']/..")
+    # ("Fall 2025", "//div[@id='select2-result-label-4']/.."),
+    ("Winter 2026", "//div[@id='select2-result-label-6']/..")
 ]
 
 
@@ -36,7 +36,7 @@ def send_sms(message):
 
 def setup_driver():
     options = Options()
-    options.add_argument("--headless")
+    #options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
