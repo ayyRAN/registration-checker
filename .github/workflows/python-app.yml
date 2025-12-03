@@ -7,8 +7,8 @@ on:
     # - cron: '0 14-2 * * 1-5'  # Monday-Friday, 9 AM - 9 PM EST (UTC+5)
     # Run every 4 hours on weekends
     # - cron: '0 */4 * * 6,0'   # Saturday-Sunday, every 4 hours
-    - cron: '0 13 * * *'  # 9:00 AM ET (13:00 UTC)
-    - cron: '0 1 * * *'   # 9:00 PM ET (01:00 UTC)
+    #- cron: '0 13 * * *'  # 9:00 AM ET (13:00 UTC)
+    #- cron: '0 1 * * *'   # 9:00 PM ET (01:00 UTC)
 
   workflow_dispatch:  # Allows manual triggering
 
