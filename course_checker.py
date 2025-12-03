@@ -36,7 +36,7 @@ def send_sms(message):
 
 def setup_driver():
     options = Options()
-    #options.add_argument("--headless")
+    options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--disable-gpu")
@@ -355,6 +355,7 @@ if __name__ == "__main__":
         print(f"Checking {term_name}")
         print(f"{'='*50}")
         check_term_courses(term_name, term_xpath)
+
 
 
 
